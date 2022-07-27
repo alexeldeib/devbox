@@ -182,14 +182,18 @@ rm -rf "$WORKDIR"
 groupadd docker || true 
 userdel nonroot || true
 useradd -d /home/nonroot -G docker -s /bin/bash nonroot || true
+mkdir -p /home/nonroot/.ssh
+cp ~/.ssh/authorized_keys /home/nonroot/.ssh/authorized_keys
 chown -R nonroot /home/nonroot
 
-mkdir -p /etc/nix
+sudo -H -u nonroot bash -c 'sh <(curl -L https://nixos.org/nix/install) --daemon'
+sudo -H -u nonroot bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash'
+sudo -H -u nonroot bash -c 'nvm install --lts && nvm use --lts'
+
 tee /etc/nix/nix.conf > /dev/null <<EOF
+build-users-group = nixbld
 experimental-features = nix-command flakes
 EOF
-
-sudo -H -u nonroot bash -c 'sh <(curl -L https://nixos.org/nix/install) --daemon'
 
 tee /etc/systemd/system/containerd.service > /dev/null <<EOF
 [Unit]
@@ -591,6 +595,8 @@ pushd /tmp
 go install github.com/onsi/ginkgo/ginkgo@latest
 go install github.com/golang/mock/mockgen@v1.6.0
 popd
+
+mkdir -p /home/nonroot/code
 
 # tee /usr/local/bin/nonroot-setup.sh > /dev/null <<EOF
 # #!/usr/bin/env bash
