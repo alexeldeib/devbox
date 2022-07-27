@@ -53,8 +53,9 @@ tee /etc/sudoers.d/nonroot > /dev/null <<EOF
 nonroot ALL=(ALL) NOPASSWD:ALL
 EOF
 
+mkdir -p $GOPATH/bin
+mkdir -p /home/nonroot
 chmod a+x /usr/local/go/bin
-chmod a+x /root/go/bin
 tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
@@ -63,15 +64,13 @@ export RUSTUP_HOME="/opt/rust/rustup"
 export PATH="${PATH}:/opt/rust/cargo/bin"
 EOF
 
-mkdir -p $GOPATH/bin
-
 wget https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
 chmod a+x rustup-init
 mv rustup-init /opt/rustup-init
 # sudo -H -u root bash -c "
 /opt/rustup-init -y -t x86_64-unknown-linux-gnu x86_64-unknown-linux-musl
 # "
-rustup install stable
+/opt/rust/rustup install stable
 
 ln -sf /var/run/systemd/resolve/resolv.conf /etc/resolv.conf
 
