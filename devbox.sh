@@ -54,8 +54,10 @@ nonroot ALL=(ALL) NOPASSWD:ALL
 EOF
 
 mkdir -p $GOPATH/bin
-mkdir -p /home/nonroot
 chmod a+x /usr/local/go/bin
+
+userdel nonroot || true
+useradd -d /home/nonroot -s /bin/bash nonroot || true
 tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
@@ -190,10 +192,10 @@ rm -rf "$WORKDIR"
 
 groupadd docker || true 
 userdel nonroot || true
-useradd -d /home/nonroot -G docker -s /bin/bash nonroot || true
+useradd -d /home/nonroot -s /bin/bash nonroot || true
 mkdir -p /home/nonroot/.ssh
 cp ~/.ssh/authorized_keys /home/nonroot/.ssh/authorized_keys
-chown -R nonroot /home/nonroot
+usermod -aG docker nonroot
 
 sudo -H -u nonroot bash -c 'sh <(curl -L https://nixos.org/nix/install) --daemon'
 sudo -H -u nonroot bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash'
