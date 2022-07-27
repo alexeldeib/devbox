@@ -39,14 +39,14 @@ rm "${GOLANG_VERSION}.linux-amd64.tar.gz"
 
 export PATH="/usr/local/go/bin:$PATH"
 export GOPATH="/root/go"
-export RUSTUP_HOME="/opt/rust/rustup"
-export PATH="${PATH}:/opt/rust/cargo/bin"
+export RUSTUP_HOME="/opt/rustup"
+export CARGO_HOME="/opt/cargo/bin"
+export PATH="${PATH}:/opt/cargo/bin"
 
 tee -a /root/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/root/go/bin:$PATH"
 export GOPATH="/root/go"
-export RUSTUP_HOME="/opt/rust/rustup"
-export PATH="${PATH}:/opt/rust/cargo/bin"
+export PATH="${PATH}:/opt/cargo/bin:/opt"
 EOF
 
 tee /etc/sudoers.d/nonroot > /dev/null <<EOF
@@ -60,17 +60,16 @@ tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
-export RUSTUP_HOME="/opt/rust/rustup"
-export PATH="${PATH}:/opt/rust/cargo/bin"
+export PATH="${PATH}:/opt/cargo/bin:/opt"
 EOF
 
 wget https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
 chmod a+x rustup-init
 mv rustup-init /opt/rustup-init
 # sudo -H -u root bash -c "
-/opt/rustup-init -y -t x86_64-unknown-linux-gnu x86_64-unknown-linux-musl
+/opt/rustup-init -y -t x86_64-unknown-linux-gnu x86_64-unknown-linux-musl --default-toolchain stable
 # "
-/opt/rust/rustup install stable
+# /opt/cargo/bin/rustup install stable
 
 ln -sf /var/run/systemd/resolve/resolv.conf /etc/resolv.conf
 
@@ -247,7 +246,7 @@ LimitCORE=infinity
 
 # Comment TasksMax if your systemd version does not support it.
 # Only systemd 226 and above support this option.
-TasksMax=infinity
+TasksMax=infinity   
 
 # set delegate yes so that systemd does not reset the cgroups of docker containers
 Delegate=yes
