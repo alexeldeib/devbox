@@ -43,7 +43,7 @@ export RUSTUP_HOME="/opt/rustup"
 export CARGO_HOME="/opt/cargo/bin"
 export PATH="${PATH}:/opt/cargo/bin"
 
-tee /root/.bashrc > /dev/null <<'EOF'
+tee -a /root/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/root/go/bin:$PATH"
 export GOPATH="/root/go"
 export PATH="${PATH}:/opt/cargo/bin:/opt"
@@ -56,7 +56,7 @@ EOF
 mkdir -p $GOPATH/bin
 mkdir -p /home/nonroot
 chmod a+x /usr/local/go/bin
-tee /home/nonroot/.bashrc > /dev/null <<'EOF'
+tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
