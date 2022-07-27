@@ -124,8 +124,8 @@ WORKDIR="$(mktemp -d)"
 pushd "$WORKDIR"
 git clone https://github.com/rootless-containers/rootlesskit
 cd rootlesskit
-go install github.com/rootless-containers/rootlesskit/cmd/rootlessctl
-go install github.com/rootless-containers/rootlesskit/cmd/rootlesskit
+go install ./cmd/rootlessctl
+go install ./cmd/rootlesskit
 chmod a+x /root/go/bin/*
 cp -a /root/go/bin/* /usr/local/bin/
 popd
