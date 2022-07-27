@@ -195,7 +195,10 @@ userdel nonroot || true
 useradd -d /home/nonroot -s /bin/bash nonroot || true
 mkdir -p /home/nonroot/.ssh
 cp ~/.ssh/authorized_keys /home/nonroot/.ssh/authorized_keys
+chown -R nonroot:nonroot /home/nonroot
 usermod -aG docker nonroot
+
+rm /etc/bash.bashrc.backup-before-nix /etc/zshrc /etc/zshrc.backup-before-nix /etc/bashrc /etc/profile.d/nix.sh /etc/profile.d/nix.sh.backup-before-nix || true
 
 sudo -H -u nonroot bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash'
 sudo -H -u nonroot bash -c 'source ~/.nvm/nvm.sh && nvm install --lts && nvm use --lts'
