@@ -43,7 +43,7 @@ export RUSTUP_HOME="/opt/rustup"
 export CARGO_HOME="/opt/cargo/bin"
 export PATH="${PATH}:/opt/cargo/bin"
 
-tee -a /root/.bashrc > /dev/null <<'EOF'
+tee /root/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/root/go/bin:$PATH"
 export GOPATH="/root/go"
 export PATH="${PATH}:/opt/cargo/bin:/opt"
@@ -56,11 +56,20 @@ EOF
 mkdir -p $GOPATH/bin
 mkdir -p /home/nonroot
 chmod a+x /usr/local/go/bin
-tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
+tee /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
 export PATH="${PATH}:/opt/cargo/bin:/opt"
+EOF
+
+tee /home/nonroot/.profile > /dev/null <<'EOF'
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+        . "$HOME/.bashrc"
+    fi
+fi
 EOF
 
 wget https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
