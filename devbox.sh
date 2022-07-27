@@ -34,7 +34,7 @@ curl -O "https://dl.google.com/go/${GOLANG_VERSION}.linux-amd64.tar.gz"
 echo "unpacking go"
 mkdir -p /usr/local/go
 chown -R "$(whoami):$(whoami)" /usr/local/go 
-tar -xvf "${GOLANG_VERSION}.linux-amd64.tar.gz" -C /usr/local
+tar -xvf "${GOLANG_VERSION}.linux-amd64.tar.gz" -C /usr/local > log 2>&1
 rm "${GOLANG_VERSION}.linux-amd64.tar.gz"
 
 export PATH="/usr/local/go/bin:$PATH"
@@ -57,7 +57,7 @@ mkdir -p $GOPATH/bin
 chmod a+x /usr/local/go/bin
 
 userdel nonroot || true
-useradd -d /home/nonroot -s /bin/bash nonroot || true
+useradd -s /bin/bash nonroot || true
 tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
@@ -85,7 +85,7 @@ mv rustup-init /opt/rustup-init
 ln -sf /var/run/systemd/resolve/resolv.conf /etc/resolv.conf
 
 curl -LO https://github.com/coredns/coredns/releases/download/v1.8.4/coredns_1.8.4_linux_amd64.tgz
-tar -xvzf coredns_1.8.4_linux_amd64.tgz -C /usr/bin
+tar -xvzf coredns_1.8.4_linux_amd64.tgz -C /usr/bin 
 chmod a+x /usr/bin/coredns
 rm coredns_1.8.4_linux_amd64.tgz
 
