@@ -57,7 +57,7 @@ mkdir -p $GOPATH/bin
 chmod a+x /usr/local/go/bin
 
 userdel nonroot || true
-useradd -s /bin/bash nonroot || true
+useradd -m /home/nonroot -s /bin/bash nonroot || true
 tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
@@ -197,9 +197,9 @@ mkdir -p /home/nonroot/.ssh
 cp ~/.ssh/authorized_keys /home/nonroot/.ssh/authorized_keys
 usermod -aG docker nonroot
 
-sudo -H -u nonroot bash -c 'sh <(curl -L https://nixos.org/nix/install) --daemon'
 sudo -H -u nonroot bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash'
-sudo -H -u nonroot bash -c 'nvm install --lts && nvm use --lts'
+sudo -H -u nonroot bash -c 'source ~/.nvm/nvm.sh && nvm install --lts && nvm use --lts'
+sudo -H -u nonroot bash -c 'sh <(curl -L https://nixos.org/nix/install) --daemon'
 
 tee /etc/nix/nix.conf > /dev/null <<EOF
 build-users-group = nixbld
