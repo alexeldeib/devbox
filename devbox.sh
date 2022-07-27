@@ -183,6 +183,7 @@ groupadd docker || true
 userdel nonroot || true
 useradd -d /home/nonroot -G docker -s /bin/bash nonroot || true
 
+mkdir -p /etc/nix
 tee /etc/nix/nix.conf > /dev/null <<EOF
 experimental-features = nix-command flakes
 EOF
