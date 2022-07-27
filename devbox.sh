@@ -122,6 +122,8 @@ rm docker-20.10.8.tgz
 echo "installing rootlessctl + rootlesskit"
 WORKDIR="$(mktemp -d)"
 pushd "$WORKDIR"
+git clone github.com/rootless-containers/rootlesskit
+cd rootlesskit
 go install github.com/rootless-containers/rootlesskit/cmd/rootlessctl
 go install github.com/rootless-containers/rootlesskit/cmd/rootlesskit
 chmod a+x /root/go/bin/*
