@@ -180,7 +180,14 @@ popd
 rm -rf "$WORKDIR"
 
 groupadd docker || true 
-useradd -d /home/nonroot -G docker nonroot || true
+userdel nonroot || true
+useradd -d /home/nonroot -G docker -s /bin/bash nonroot || true
+
+tee /etc/nix/nix.conf > /dev/null <<EOF
+experimental-features = nix-command flakes
+EOF
+
+sudo -H -u nonroot bash -c 'sh <(curl -L https://nixos.org/nix/install) --daemon'
 
 tee /etc/systemd/system/containerd.service > /dev/null <<EOF
 [Unit]
