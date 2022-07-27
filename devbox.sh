@@ -179,8 +179,8 @@ popd
 popd
 rm -rf "$WORKDIR"
 
-groupadd docker || true 	
-usermod -aG docker nonroot || true
+groupadd docker || true 
+useradd -d /home/nonroot -G docker nonroot || true
 
 tee /etc/systemd/system/containerd.service > /dev/null <<EOF
 [Unit]
