@@ -142,6 +142,8 @@ install -m 0555 docker/docker /usr/bin/docker
 rm -rf docker 
 rm docker-20.10.17.tgz
 
+go install github.com/schollz/croc/v9@latest
+
 echo "installing rootlessctl + rootlesskit"
 WORKDIR="$(mktemp -d)"
 pushd "$WORKDIR"
