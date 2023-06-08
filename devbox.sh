@@ -152,17 +152,6 @@ popd
 echo "removing rootlessctl + rootlesskit work dir"
 rm -r "$WORKDIR"
 
-WORKDIR="$(mktemp -d)"
-pushd "$WORKDIR"
-git clone https://github.com/regclient/regclient.git
-cd regclient
-make
-bin/regctl version
-install -m 0555 bin/regctl /usr/local/bin/regctl
-popd
-echo "removing rootlessctl + rootlesskit work dir"
-rm -r "$WORKDIR"
-
 WORKDIR="src-skopeo"
 mkdir "$WORKDIR"
 pushd "$WORKDIR"
@@ -624,6 +613,17 @@ systemctl restart buildkit
 # cp /etc/default/grub /etc/default/grub.old
 # sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=1"/' /etc/default/grub
 # update-grub
+
+WORKDIR="$(mktemp -d)"
+pushd "$WORKDIR"
+git clone https://github.com/regclient/regclient.git
+cd regclient
+make
+bin/regctl version
+install -m 0555 bin/regctl /usr/local/bin/regctl
+popd
+echo "removing rootlessctl + rootlesskit work dir"
+rm -r "$WORKDIR"
 
 pushd /tmp
 go install github.com/onsi/ginkgo/ginkgo@latest
