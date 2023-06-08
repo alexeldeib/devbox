@@ -89,11 +89,11 @@ tar -xvzf coredns_1.8.4_linux_amd64.tgz -C /usr/bin
 chmod a+x /usr/bin/coredns
 rm coredns_1.8.4_linux_amd64.tgz
 
-curl -o runc -L https://github.com/opencontainers/runc/releases/download/v1.0.2/runc.amd64
+curl -o runc -L https://github.com/opencontainers/runc/releases/download/v1.1.7/runc.amd64
 install -m 0555 runc /usr/local/sbin/runc
 rm runc
 
-containerd_version="1.6.6"
+containerd_version="1.7.1"
 curl -LO https://github.com/containerd/containerd/releases/download/v${containerd_version}/containerd-${containerd_version}-linux-amd64.tar.gz
 tar -xvzf containerd-${containerd_version}-linux-amd64.tar.gz -C /usr
 rm containerd-${containerd_version}-linux-amd64.tar.gz
@@ -103,14 +103,16 @@ tar -C /usr/local/bin -xvzf stargz-snapshotter-v0.8.0-linux-amd64.tar.gz contain
 wget -O /etc/systemd/system/stargz-snapshotter.service https://raw.githubusercontent.com/containerd/stargz-snapshotter/main/script/config/etc/systemd/system/stargz-snapshotter.service
 rm stargz-snapshotter-v0.8.0-linux-amd64.tar.gz
 
-curl -LO https://github.com/moby/buildkit/releases/download/v0.9.0/buildkit-v0.9.0.linux-amd64.tar.gz
-tar -xvzf buildkit-v0.9.0.linux-amd64.tar.gz -C /usr/local
-rm buildkit-v0.9.0.linux-amd64.tar.gz
+buildkit_version="v0.11.2"
+curl -LO https://github.com/moby/buildkit/releases/download/${buildkit_version}/buildkit-${buildkit_version}.linux-amd64.tar.gz
+tar -xvzf buildkit-${buildkit_version}.linux-amd64.tar.gz -C /usr/local
+rm buildkit-${buildkit_version}.linux-amd64.tar.gz
 
+cni_plugin_version="v1.3.0"
 mkdir -p /opt/cni/bin
-curl -LO https://github.com/containernetworking/plugins/releases/download/v1.0.1/cni-plugins-linux-amd64-v1.0.1.tgz
-tar -xvzf cni-plugins-linux-amd64-v1.0.1.tgz -C /opt/cni/bin/
-rm cni-plugins-linux-amd64-v1.0.1.tgz
+curl -LO https://github.com/containernetworking/plugins/releases/download/v1.0.1/cni-plugins-linux-amd64-${cni_plugin_version}.tgz
+tar -xvzf cni-plugins-linux-amd64-${cni_plugin_version}.tgz -C /opt/cni/bin/
+rm cni-plugins-linux-amd64-${cni_plugin_version}.tgz
 
 curl -LO https://github.com/AkihiroSuda/cni-isolation/releases/download/v0.0.3/cni-isolation-amd64.tgz
 tar -xvzf cni-isolation-amd64.tgz -C /opt/cni/bin/
