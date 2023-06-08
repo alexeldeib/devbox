@@ -27,7 +27,7 @@ EOF
 sysctl -p
 systemctl daemon-reload
 
-GOLANG_VERSION="go1.18.2"
+GOLANG_VERSION="go1.20.5"
 echo "Downloading ${GOLANG_VERSION}"
 curl -O "https://dl.google.com/go/${GOLANG_VERSION}.linux-amd64.tar.gz"
 
