@@ -117,7 +117,7 @@ rm buildkit-${buildkit_version}.linux-amd64.tar.gz
 
 cni_plugin_version="v1.3.0"
 mkdir -p /opt/cni/bin
-curl -LO https://github.com/containernetworking/plugins/releases/download/v1.0.1/cni-plugins-linux-amd64-${cni_plugin_version}.tgz
+curl -LO https://github.com/containernetworking/plugins/releases/download/${cni_plugin_version}/cni-plugins-linux-amd64-${cni_plugin_version}.tgz
 tar -xvzf cni-plugins-linux-amd64-${cni_plugin_version}.tgz -C /opt/cni/bin/
 rm cni-plugins-linux-amd64-${cni_plugin_version}.tgz
 
