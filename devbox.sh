@@ -57,7 +57,7 @@ mkdir -p $GOPATH/bin
 chmod a+x /usr/local/go/bin
 
 userdel nonroot || true
-useradd -m /home/nonroot -s /bin/bash nonroot || true
+useradd -m -s /bin/bash nonroot || true
 tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
@@ -88,6 +88,13 @@ curl -LO https://github.com/coredns/coredns/releases/download/v1.8.4/coredns_1.8
 tar -xvzf coredns_1.8.4_linux_amd64.tgz -C /usr/bin 
 chmod a+x /usr/bin/coredns
 rm coredns_1.8.4_linux_amd64.tgz
+
+VERSION="1.0.0"
+curl -LO "https://github.com/oras-project/oras/releases/download/v${VERSION}/oras_${VERSION}_linux_amd64.tar.gz"
+mkdir -p oras-install/
+tar -zxf oras_${VERSION}_*.tar.gz -C oras-install/
+sudo mv oras-install/oras /usr/local/bin/
+rm -rf oras_${VERSION}_*.tar.gz oras-install/
 
 curl -o runc -L https://github.com/opencontainers/runc/releases/download/v1.1.7/runc.amd64
 install -m 0555 runc /usr/local/sbin/runc
@@ -141,6 +148,17 @@ go install ./cmd/rootlessctl
 go install ./cmd/rootlesskit
 chmod a+x /root/go/bin/*
 cp -a /root/go/bin/* /usr/local/bin/
+popd
+echo "removing rootlessctl + rootlesskit work dir"
+rm -r "$WORKDIR"
+
+WORKDIR="$(mktemp -d)"
+pushd "$WORKDIR"
+git clone https://github.com/regclient/regclient.git
+cd regclient
+make
+bin/regctl version
+install -m 0555 bin/regctl /usr/local/bin/regctl
 popd
 echo "removing rootlessctl + rootlesskit work dir"
 rm -r "$WORKDIR"
