@@ -100,6 +100,9 @@ curl -o runc -L https://github.com/opencontainers/runc/releases/download/v1.1.7/
 install -m 0555 runc /usr/local/sbin/runc
 rm runc
 
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
 containerd_version="1.7.1"
 curl -LO https://github.com/containerd/containerd/releases/download/v${containerd_version}/containerd-${containerd_version}-linux-amd64.tar.gz
 tar -xvzf containerd-${containerd_version}-linux-amd64.tar.gz -C /usr
@@ -631,6 +634,8 @@ go install github.com/golang/mock/mockgen@v1.6.0
 popd
 
 mkdir -p /home/nonroot/code
+
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 # tee /usr/local/bin/nonroot-setup.sh > /dev/null <<EOF
 # #!/usr/bin/env bash
