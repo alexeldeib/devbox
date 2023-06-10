@@ -8,7 +8,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get -o Dpkg::Options::="--force-confold" upgrade -q -y
 apt-get -o Dpkg::Options::="--force-confold" dist-upgrade -q -y
-apt install -y apt-transport-https build-essential make gcc wget git rsync gettext autopoint bison libtool automake gperf texinfo patch iptables uidmap sudo file libexplain-dev libgpgme-dev libassuan-dev libbtrfs-dev libdevmapper-dev pkg-config iptables dbus-user-session moreutils jq systemd-container daemonize < /dev/null
+apt install -y apt-transport-https build-essential devscripts make gcc wget git rsync gettext autopoint bison libtool automake gperf texinfo patch iptables uidmap sudo file libexplain-dev libgpgme-dev libassuan-dev libbtrfs-dev libdevmapper-dev pkg-config iptables dbus-user-session moreutils jq systemd-container daemonize < /dev/null
 
 git config --global user.name "Ace Eldeib"
 
