@@ -132,15 +132,21 @@ curl -LO https://github.com/containerd/nerdctl/releases/download/v0.11.2/nerdctl
 tar -xvzf nerdctl-full-0.11.2-linux-amd64.tar.gz -C /usr/
 rm nerdctl-full-0.11.2-linux-amd64.tar.gz
 
-curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-20.10.17.tgz
-tar -xvzf docker-20.10.17.tgz
+docker_version="24.0.3"
+curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-${docker_version}.tgz
+tar -xvzf docker-${docker_version}.tgz
 
 install -m 0555 docker/dockerd /usr/bin/dockerd
 install -m 0555 docker/docker-init /usr/bin/docker-init
 install -m 0555 docker/docker-proxy /usr/bin/docker-proxy
 install -m 0555 docker/docker /usr/bin/docker
-rm -rf docker 
-rm docker-20.10.17.tgz
+rm -rf docker
+rm docker-${docker_version}.tgz
+
+mkdir -p $(dirname /usr/local/lib/docker/cli-plugins/docker-buildx)
+wget https://github.com/docker/buildx/releases/download/v0.11.1/buildx-v0.11.1.linux-amd64
+mv buildx-v0.11.1.linux-amd64 /usr/local/lib/docker/cli-plugins/docker-buildx
+chmod a+x /usr/local/lib/docker/cli-plugins/docker-buildx
 
 go install github.com/schollz/croc/v9@latest
 
