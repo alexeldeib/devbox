@@ -19,8 +19,8 @@ cp ~/.ssh/authorized_keys /home/nonroot/.ssh/authorized_keys
 chown -R nonroot:nonroot /home/nonroot
 usermod -aG docker nonroot
 sudo -H -u nonroot bash -c 'mkdir -p /home/nonroot/.ssh/keys'
-sudo -H -u nonroot bash -c 'ssh-keygen -t rsa -n 4096 -f /home/nonroot/.ssh/keys/id_rsa -N ""'
-sudo -H -u nonroot bash -c 'ssh-keygen -t ed25519 -f /home/nonroot/.ssh/keys/id_ed25519 -N ""'
+sudo -H -u nonroot bash -c 'ssh-keygen -t rsa -n 4096 -y -f /home/nonroot/.ssh/keys/id_rsa -N ""'
+sudo -H -u nonroot bash -c 'ssh-keygen -t ed25519 -y -f /home/nonroot/.ssh/keys/id_ed25519 -N ""'
 
 echo "installing aurs"
 pushd /tmp
