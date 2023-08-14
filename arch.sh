@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
+groupadd docker || true 
 userdel nonroot || true
-useradd -m -s /bin/bash nonroot || true
+useradd -d /home/nonroot -s /bin/bash nonroot || true
+mkdir -p /home/nonroot/.ssh
+cp ~/.ssh/authorized_keys /home/nonroot/.ssh/authorized_keys
+chown -R nonroot:nonroot /home/nonroot
+usermod -aG docker nonroot
+sudo -H -u nonroot bash -c 'mkdir -p /home/nonroot/.ssh/keys'
+sudo -H -u nonroot bash -c 'ssh-keygen -t rsa -n 4096 -f /home/nonroot/.ssh/keys/id_rsa -N ""'
+sudo -H -u nonroot bash -c 'ssh-keygen -t ed25519 -f /home/nonroot/.ssh/keys/id_ed25519 -N ""'
 
 pacman -Syu
 
@@ -28,7 +36,6 @@ tee /etc/systemd/system/user@.service.d/delegate.conf > /dev/null <<EOF
 Delegate=cpu cpuset io memory pids
 EOF
 
-
 tee -a /etc/sysctl.d/99-forward.conf > /dev/null <<EOF
 net.ipv4.ip_forward = 1
 net.ipv6.conf.all.forwarding = 1
@@ -49,14 +56,36 @@ rm "${GOLANG_VERSION}.linux-amd64.tar.gz"
 
 export PATH="/usr/local/go/bin:$PATH"
 export GOPATH="/root/go"
-export RUSTUP_HOME="/opt/rustup"
-export CARGO_HOME="/opt/cargo/bin"
-export PATH="${PATH}:/opt/cargo/bin"
 
 tee -a /root/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/root/go/bin:$PATH"
 export GOPATH="/root/go"
 alias az="docker run -it -v ${HOME}/.azure:/root/.azure -v ${HOME}/.ssh:/root/.ssh mcr.microsoft.com/azure-cli az"
+EOF
+
+tee /home/nonroot/.ssh/config > /dev/null <<EOF
+Host vs-ssh.visualstudio.com
+    IdentityFile ~/.ssh/keys/id_rsa
+
+Host github.com
+    IdentityFile ~/.ssh/keys/id_ed25519
+
+Host *
+    ServerAliveInterval 10
+    IdentitiesOnly yes
+EOF
+chown nonroot /home/nonroot/.ssh/config
+
+tee /root/.ssh/config > /dev/null <<EOF
+Host vs-ssh.visualstudio.com
+    IdentityFile ~/.ssh/keys/id_rsa
+
+Host github.com
+    IdentityFile ~/.ssh/keys/id_ed25519
+
+Host *
+    ServerAliveInterval 10
+    IdentitiesOnly yes
 EOF
 
 tee /etc/sudoers.d/nonroot > /dev/null <<EOF
@@ -70,7 +99,7 @@ tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
-export PATH="${PATH}:/opt/cargo/bin:/opt"
+alias az="docker run -it -v ${HOME}/.azure:/root/.azure -v ${HOME}/.ssh:/root/.ssh mcr.microsoft.com/azure-cli az"
 EOF
 
 tee /home/nonroot/.profile > /dev/null <<'EOF'
@@ -81,8 +110,6 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 EOF
-
-ln -sf /var/run/systemd/resolve/resolv.conf /etc/resolv.conf
 
 oras_version="1.0.1"
 curl -LO "https://github.com/oras-project/oras/releases/download/v${oras_version}/oras_${oras_version}_linux_amd64.tar.gz"
@@ -203,14 +230,6 @@ install -m 0555 unshare /usr/local/bin/unshare
 popd
 popd
 rm -rf "$WORKDIR"
-
-groupadd docker || true 
-userdel nonroot || true
-useradd -d /home/nonroot -s /bin/bash nonroot || true
-mkdir -p /home/nonroot/.ssh
-cp ~/.ssh/authorized_keys /home/nonroot/.ssh/authorized_keys
-chown -R nonroot:nonroot /home/nonroot
-usermod -aG docker nonroot
 
 rm -rf /nix /etc/bash.bashrc.backup-before-nix /etc/zshrc /etc/zshrc.backup-before-nix /etc/bashrc /etc/profile.d/nix.sh /etc/profile.d/nix.sh.backup-before-nix || true
 
