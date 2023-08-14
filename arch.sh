@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -euxo pipefail
+
 pacman -Syu
 
 pacman -S base-devel git wget moreutils ripgrep 
