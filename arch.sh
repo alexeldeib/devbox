@@ -6,9 +6,11 @@ pacman -Syu
 pacman -S base-devel git wget moreutils ripgrep
 
 mkdir -p /etc/sudoers.d
+
 tee /etc/sudoers.d/nonroot > /dev/null <<EOF
 nonroot ALL=(ALL) NOPASSWD:ALL
 EOF
+
 groupadd docker || true 
 userdel nonroot || true
 useradd -d /home/nonroot -s /bin/bash nonroot || true
@@ -20,17 +22,14 @@ sudo -H -u nonroot bash -c 'mkdir -p /home/nonroot/.ssh/keys'
 sudo -H -u nonroot bash -c 'ssh-keygen -t rsa -n 4096 -f /home/nonroot/.ssh/keys/id_rsa -N ""'
 sudo -H -u nonroot bash -c 'ssh-keygen -t ed25519 -f /home/nonroot/.ssh/keys/id_ed25519 -N ""'
 
-echo "setting up paru workdir"
+echo "installing aurs"
 pushd /tmp
-git clone https://aur.archlinux.org/paru.git
-pushd paru
 chmod -R a+rw /tmp
+sudo -H -u nonroot bash -c 'git clone https://aur.archlinux.org/smem.git'
+pushd smem
 sudo -H -u nonroot bash -c 'makepkg -si'
 popd
-sudo -H -u nonroot bash -c 'paru --noconfirm -S azure-cli'
-sudo -H -u nonroot bash -c 'paru --noconfirm -S smem'
 popd
-rm -r "$WORKDIR"
 
 git config --global user.name "Ace Eldeib"
 
