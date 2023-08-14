@@ -5,6 +5,10 @@ pacman -Syu
 
 pacman -S base-devel git wget moreutils ripgrep
 
+mkdir -p /etc/sudoers.d
+tee /etc/sudoers.d/nonroot > /dev/null <<EOF
+nonroot ALL=(ALL) NOPASSWD:ALL
+EOF
 groupadd docker || true 
 userdel nonroot || true
 useradd -d /home/nonroot -s /bin/bash nonroot || true
@@ -86,10 +90,6 @@ Host github.com
 Host *
     ServerAliveInterval 10
     IdentitiesOnly yes
-EOF
-
-tee /etc/sudoers.d/nonroot > /dev/null <<EOF
-nonroot ALL=(ALL) NOPASSWD:ALL
 EOF
 
 mkdir -p $GOPATH/bin
