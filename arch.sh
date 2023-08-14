@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
+pacman -Syu
+
+pacman -S base-devel git wget moreutils ripgrep
+
 groupadd docker || true 
 userdel nonroot || true
 useradd -d /home/nonroot -s /bin/bash nonroot || true
@@ -11,10 +15,6 @@ usermod -aG docker nonroot
 sudo -H -u nonroot bash -c 'mkdir -p /home/nonroot/.ssh/keys'
 sudo -H -u nonroot bash -c 'ssh-keygen -t rsa -n 4096 -f /home/nonroot/.ssh/keys/id_rsa -N ""'
 sudo -H -u nonroot bash -c 'ssh-keygen -t ed25519 -f /home/nonroot/.ssh/keys/id_ed25519 -N ""'
-
-pacman -Syu
-
-pacman -S base-devel git wget moreutils ripgrep
 
 echo "setting up paru workdir"
 pushd /tmp
