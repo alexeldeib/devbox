@@ -56,7 +56,7 @@ export PATH="${PATH}:/opt/cargo/bin"
 tee -a /root/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/root/go/bin:$PATH"
 export GOPATH="/root/go"
-export PATH="${PATH}:/opt/cargo/bin:/opt"
+alias az="docker run -it -v ${HOME}/.azure:/root/.azure -v ${HOME}/.ssh:/root/.ssh mcr.microsoft.com/azure-cli az"
 EOF
 
 tee /etc/sudoers.d/nonroot > /dev/null <<EOF
