@@ -1,9 +1,24 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
+userdel nonroot || true
+useradd -m -s /bin/bash nonroot || true
+
 pacman -Syu
 
-pacman -S base-devel git wget moreutils ripgrep 
+pacman -S base-devel git wget moreutils ripgrep
+
+echo "setting up paru workdir"
+pushd /tmp/foo
+git clone https://aur.archlinux.org/paru.git
+pushd paru
+chmod -R a+rw /tmp
+su - nonroot bash -c 'makepkg -si'
+popd
+su - nonroot bash -c 'paru --noconfirm -S azure-cli'
+su - nonroot bash -c 'paru --noconfirm -S smem'
+popd
+rm -r "$WORKDIR"
 
 git config --global user.name "Ace Eldeib"
 
@@ -51,8 +66,6 @@ EOF
 mkdir -p $GOPATH/bin
 chmod a+x /usr/local/go/bin
 
-userdel nonroot || true
-useradd -m -s /bin/bash nonroot || true
 tee -a /home/nonroot/.bashrc > /dev/null <<'EOF'
 export PATH="/usr/local/go/bin:/home/nonroot/go/bin:$PATH"
 export GOPATH="/home/nonroot/go"
@@ -68,14 +81,6 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 EOF
-
-wget https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
-chmod a+x rustup-init
-mv rustup-init /opt/rustup-init
-# sudo -H -u root bash -c "
-/opt/rustup-init -y -t x86_64-unknown-linux-gnu x86_64-unknown-linux-musl --default-toolchain stable
-# "
-# /opt/cargo/bin/rustup install stable
 
 ln -sf /var/run/systemd/resolve/resolv.conf /etc/resolv.conf
 
