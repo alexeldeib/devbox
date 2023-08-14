@@ -19,10 +19,10 @@ net.ipv4.ip_forward = 1
 net.ipv6.conf.all.forwarding = 1
 EOF
 
-sysctl -p
+sysctl --system
 systemctl daemon-reload
 
-GOLANG_VERSION=$(curl -s 'https://go.dev/VERSION?m=text' | head -n 1)
+GOLANG_VERSION="$(curl -s 'https://go.dev/VERSION?m=text' | head -n 1)"
 echo "Downloading ${GOLANG_VERSION}"
 curl -O "https://dl.google.com/go/${GOLANG_VERSION}.linux-amd64.tar.gz"
 
@@ -321,7 +321,7 @@ After=buildkit.socket
 Documentation=https://github.com/moby/buildkit
 
 [Service]
-ExecStart=/usr/local/bin/buildkitd --addr fd:// --oci-worker=true --oci-worker-snapshotter=stargz --containerd-worker=false --containerd-worker-snapshotter=stargz
+ExecStart=/usr/local/bin/buildkitd --addr fd:// --oci-worker=true --containerd-worker=false
 
 [Install]
 WantedBy=multi-user.target
