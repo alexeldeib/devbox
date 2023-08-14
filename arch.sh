@@ -9,14 +9,14 @@ pacman -Syu
 pacman -S base-devel git wget moreutils ripgrep
 
 echo "setting up paru workdir"
-pushd /tmp/foo
+pushd /tmp
 git clone https://aur.archlinux.org/paru.git
 pushd paru
 chmod -R a+rw /tmp
-su - nonroot bash -c 'makepkg -si'
+sudo -H -u nonroot bash -c 'makepkg -si'
 popd
-su - nonroot bash -c 'paru --noconfirm -S azure-cli'
-su - nonroot bash -c 'paru --noconfirm -S smem'
+sudo -H -u nonroot bash -c 'paru --noconfirm -S azure-cli'
+sudo -H -u nonroot bash -c 'paru --noconfirm -S smem'
 popd
 rm -r "$WORKDIR"
 
