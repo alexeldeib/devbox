@@ -398,8 +398,6 @@ popd
 
 mkdir -p /home/nonroot/code
 
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
 # tee /usr/local/bin/nonroot-setup.sh > /dev/null <<EOF
 # #!/usr/bin/env bash
 # containerd-rootless-setuptool.sh install
