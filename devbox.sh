@@ -96,14 +96,14 @@ tar -zxf oras_${VERSION}_*.tar.gz -C oras-install/
 sudo mv oras-install/oras /usr/local/bin/
 rm -rf oras_${VERSION}_*.tar.gz oras-install/
 
-curl -o runc -L https://github.com/opencontainers/runc/releases/download/v1.1.7/runc.amd64
+curl -o runc -L https://github.com/opencontainers/runc/releases/download/v1.1.12/runc.amd64
 install -m 0555 runc /usr/local/sbin/runc
 rm runc
 
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-containerd_version="1.7.1"
+containerd_version="1.7.14"
 curl -LO https://github.com/containerd/containerd/releases/download/v${containerd_version}/containerd-${containerd_version}-linux-amd64.tar.gz
 tar -xvzf containerd-${containerd_version}-linux-amd64.tar.gz -C /usr
 rm containerd-${containerd_version}-linux-amd64.tar.gz
@@ -132,7 +132,7 @@ curl -LO https://github.com/containerd/nerdctl/releases/download/v0.11.2/nerdctl
 tar -xvzf nerdctl-full-0.11.2-linux-amd64.tar.gz -C /usr/
 rm nerdctl-full-0.11.2-linux-amd64.tar.gz
 
-docker_version="24.0.3"
+docker_version="25.0.5"
 curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-${docker_version}.tgz
 tar -xvzf docker-${docker_version}.tgz
 
